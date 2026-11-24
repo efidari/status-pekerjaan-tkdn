@@ -1,0 +1,753 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <title>Dashboard TikTok Live Dian</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <style>
+      button, [role="button"], select, summary, a.btn, input:not([type="checkbox"], [type="radio"]) { min-height: 2.25rem; }
+    </style>
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f4f4f6;
+        --surface: #ffffff;
+        --surface-2: #ececf0;
+        --ink: #161823;
+        --ink-2: #4a4a57;
+        --ink-3: #6d6d7c;
+        --line: #e2e2e9;
+        --red: #fe2c55;
+        --red-dark: #d91e42;
+        --red-soft: #ffe9ee;
+        --cyan: #0b7d84;
+        --cyan-soft: #e0f5f5;
+        --amber: #9a6200;
+        --amber-soft: #fdf0d5;
+        --green: #0e7a3d;
+        --green-soft: #e2f4e8;
+        --hero-bg: #121218;
+        --hero-ink: #ffffff;
+        --hero-ink-2: #c9c9d4;
+        --track: #e6e6ec;
+        --shadow: 0 1px 2px rgba(22,24,35,.05), 0 8px 24px rgba(22,24,35,.06);
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          color-scheme: dark;
+          --bg: #0e0e12;
+          --surface: #191920;
+          --surface-2: #22222c;
+          --ink: #f2f2f5;
+          --ink-2: #c4c4cf;
+          --ink-3: #9a9aa8;
+          --line: #2c2c38;
+          --red: #ff4d6d;
+          --red-dark: #ff8098;
+          --red-soft: #3a1a24;
+          --cyan: #4fd8de;
+          --cyan-soft: #14333a;
+          --amber: #f5c86b;
+          --amber-soft: #38300f;
+          --green: #5fd598;
+          --green-soft: #123626;
+          --hero-bg: #000000;
+          --hero-ink: #ffffff;
+          --hero-ink-2: #b9b9c6;
+          --track: #2c2c38;
+          --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.35);
+        }
+      }
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+        * { animation: none !important; transition: none !important; }
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+        font-size: 16px;
+        line-height: 1.55;
+        -webkit-font-smoothing: antialiased;
+      }
+      .wrap { max-width: 1060px; margin: 0 auto; padding: 0 16px 56px; }
+      a { color: var(--red-dark); }
+      :focus-visible { outline: 3px solid var(--cyan); outline-offset: 2px; border-radius: 6px; }
+
+      /* ---------- Hero ---------- */
+      .hero {
+        background: var(--hero-bg);
+        color: var(--hero-ink);
+        margin: 0 -16px;
+        padding: 30px 20px 26px;
+        border-radius: 0 0 24px 24px;
+        position: relative;
+        overflow: hidden;
+      }
+      .hero::after {
+        content: "";
+        position: absolute; right: -70px; top: -70px;
+        width: 220px; height: 220px; border-radius: 50%;
+        border: 34px solid rgba(254,44,85,.28);
+        pointer-events: none;
+      }
+      .hero::before {
+        content: "";
+        position: absolute; right: 58px; bottom: -88px;
+        width: 150px; height: 150px; border-radius: 50%;
+        border: 24px solid rgba(37,244,238,.16);
+        pointer-events: none;
+      }
+      .live-badge {
+        display: inline-flex; align-items: center; gap: 8px;
+        background: var(--red); color: #fff;
+        font-size: 12px; font-weight: 800; letter-spacing: .14em;
+        padding: 6px 12px; border-radius: 999px;
+        position: relative; z-index: 1;
+      }
+      .live-dot { width: 8px; height: 8px; border-radius: 50%; background: #fff; animation: pulse 1.6s ease-in-out infinite; }
+      @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+      .hero h1 {
+        margin: 16px 0 6px;
+        font-size: clamp(30px, 6vw, 46px);
+        line-height: 1.08; font-weight: 800; letter-spacing: -.01em;
+        position: relative; z-index: 1;
+        text-shadow: 2.5px 0 0 rgba(37,244,238,.45), -2.5px 0 0 rgba(254,44,85,.55);
+      }
+      .hero .sub { margin: 0; color: var(--hero-ink-2); font-size: 16px; max-width: 56ch; position: relative; z-index: 1; }
+      .hero .sub strong { color: var(--hero-ink); }
+      .hero-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; position: relative; z-index: 1; }
+      .chip {
+        display: inline-flex; align-items: center; gap: 7px;
+        border: 1px solid rgba(255,255,255,.25); color: var(--hero-ink);
+        font-size: 13px; font-weight: 600;
+        padding: 7px 12px; border-radius: 999px;
+        text-decoration: none; min-height: 2.25rem;
+      }
+      a.chip:hover { border-color: #fff; background: rgba(255,255,255,.08); }
+      .chip svg { flex: none; }
+
+      /* ---------- Sections ---------- */
+      section { margin-top: 38px; }
+      .sec-head { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 6px; }
+      .sec-head h2 { margin: 0; font-size: 24px; font-weight: 800; letter-spacing: -.01em; }
+      .sec-head .when { font-size: 13px; font-weight: 700; color: var(--red-dark); background: var(--red-soft); padding: 4px 10px; border-radius: 999px; }
+      .sec-desc { margin: 0 0 16px; color: var(--ink-2); max-width: 68ch; }
+
+      /* ---------- Stat cards ---------- */
+      .stat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+      @media (min-width: 640px) { .stat-grid { grid-template-columns: repeat(3, 1fr); } }
+      @media (min-width: 960px) { .stat-grid { grid-template-columns: repeat(4, 1fr); } }
+      .stat {
+        background: var(--surface); border: 1px solid var(--line);
+        border-radius: 16px; padding: 16px;
+        box-shadow: var(--shadow);
+      }
+      .stat .label { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: var(--ink-3); margin: 0 0 6px; }
+      .stat .label svg { color: var(--red); flex: none; }
+      .stat .num { font-size: 30px; font-weight: 800; line-height: 1.05; letter-spacing: -.01em; }
+      .stat .note { margin: 5px 0 0; font-size: 13px; color: var(--ink-2); }
+      .stat .up { color: var(--green); font-weight: 800; }
+      .stat.hero-stat { background: var(--ink); color: #fff; border-color: var(--ink); }
+      .stat.hero-stat .label { color: #b9b9c6; }
+      .stat.hero-stat .note { color: #c9c9d4; }
+      @media (prefers-color-scheme: dark) {
+        .stat.hero-stat { background: #ffffff; color: #161823; border-color: #fff; }
+        .stat.hero-stat .label { color: #55555f; }
+        .stat.hero-stat .note { color: #4a4a57; }
+      }
+
+      .split { display: grid; gap: 12px; margin-top: 12px; }
+      @media (min-width: 760px) { .split { grid-template-columns: 1fr 1fr; } }
+      .panel {
+        background: var(--surface); border: 1px solid var(--line);
+        border-radius: 16px; padding: 18px; box-shadow: var(--shadow);
+      }
+      .panel h3 { margin: 0 0 4px; font-size: 17px; font-weight: 800; }
+      .panel .p-sub { margin: 0 0 14px; font-size: 13px; color: var(--ink-3); }
+      .mini-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+      .mini-stats .m-num { font-size: 22px; font-weight: 800; line-height: 1.1; }
+      .mini-stats .m-label { font-size: 12px; color: var(--ink-3); font-weight: 600; margin-top: 2px; }
+      .gifter { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-top: 1px solid var(--line); }
+      .gifter:first-of-type { border-top: none; }
+      .gifter .rank {
+        width: 34px; height: 34px; border-radius: 50%; flex: none;
+        display: grid; place-items: center; font-weight: 800; font-size: 14px;
+        background: var(--amber-soft); color: var(--amber);
+      }
+      .gifter .g-name { font-weight: 700; }
+      .gifter .g-coins { margin-left: auto; font-weight: 800; white-space: nowrap; }
+      .gifter .g-coins small { display: block; text-align: right; font-weight: 600; font-size: 12px; color: var(--ink-3); }
+
+      /* ---------- Progress ---------- */
+      .targets { display: grid; gap: 12px; }
+      @media (min-width: 760px) { .targets { grid-template-columns: 1fr 1fr; } }
+      .target {
+        background: var(--surface); border: 1px solid var(--line);
+        border-radius: 16px; padding: 18px; box-shadow: var(--shadow);
+      }
+      .target .t-top { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+      .target h3 { margin: 0; font-size: 16px; font-weight: 800; }
+      .target .t-nums { font-size: 14px; color: var(--ink-2); font-weight: 600; white-space: nowrap; }
+      .target .t-nums strong { color: var(--ink); font-size: 18px; }
+      .bar { height: 12px; background: var(--track); border-radius: 999px; overflow: hidden; margin: 12px 0 8px; }
+      .bar > span {
+        display: block; height: 100%; width: 0;
+        background: var(--red); border-radius: 999px;
+        transition: width 1s ease;
+      }
+      .bar > span.cyan { background: var(--cyan); }
+      .target .t-note { margin: 0; font-size: 13px; color: var(--ink-2); }
+      .routine { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+      .routine .r-chip {
+        flex: 1 1 220px;
+        background: var(--cyan-soft); color: var(--ink);
+        border-radius: 12px; padding: 12px 14px; font-size: 14px;
+      }
+      .routine .r-chip strong { display: block; font-size: 15px; }
+
+      /* ---------- Schedule ---------- */
+      .days { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+      @media (min-width: 760px) { .days { grid-template-columns: repeat(4, 1fr); } }
+      .day {
+        background: var(--surface); border: 1px solid var(--line);
+        border-radius: 16px; padding: 16px; text-align: left;
+        box-shadow: var(--shadow); position: relative;
+      }
+      .day .d-name { font-size: 19px; font-weight: 800; margin: 0; }
+      .day .d-time { margin: 4px 0 0; font-weight: 700; color: var(--red-dark); font-size: 15px; }
+      .day .d-dur { margin: 2px 0 0; font-size: 13px; color: var(--ink-3); }
+      .day .today-badge {
+        display: none; position: absolute; top: 12px; right: 12px;
+        background: var(--red); color: #fff; font-size: 11px; font-weight: 800;
+        letter-spacing: .06em; padding: 4px 9px; border-radius: 999px;
+      }
+      .day.is-today { border: 2px solid var(--red); }
+      .day.is-today .today-badge { display: inline-block; }
+      .tips { margin: 14px 0 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+      @media (min-width: 760px) { .tips { grid-template-columns: repeat(3, 1fr); } }
+      .tips li {
+        background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+        padding: 12px 14px; font-size: 14px; color: var(--ink-2);
+      }
+      .tips li strong { color: var(--ink); display: block; margin-bottom: 2px; font-size: 14px; }
+
+      /* ---------- Clips ---------- */
+      .hashtag-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 14px 0 4px; }
+      .tag {
+        background: var(--surface-2); color: var(--ink); font-weight: 700; font-size: 14px;
+        padding: 7px 12px; border-radius: 999px;
+      }
+      .btn {
+        display: inline-flex; align-items: center; gap: 8px;
+        background: var(--ink); color: var(--bg);
+        border: none; cursor: pointer; font: inherit; font-weight: 700; font-size: 14px;
+        padding: 9px 16px; border-radius: 999px; min-height: 2.5rem;
+      }
+      @media (prefers-color-scheme: dark) { .btn { background: #fff; color: #161823; } }
+      .btn:active { transform: scale(.98); }
+      .ideas { margin: 14px 0 0; padding: 0; list-style: none; counter-reset: idea; display: grid; gap: 10px; }
+      @media (min-width: 760px) { .ideas { grid-template-columns: 1fr 1fr; } }
+      .ideas li {
+        counter-increment: idea;
+        background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+        padding: 12px 14px 12px 52px; position: relative;
+        font-weight: 600; font-size: 15px; box-shadow: var(--shadow);
+      }
+      .ideas li::before {
+        content: counter(idea);
+        position: absolute; left: 12px; top: 10px;
+        width: 28px; height: 28px; border-radius: 9px;
+        background: var(--red-soft); color: var(--red-dark);
+        display: grid; place-items: center; font-weight: 800; font-size: 14px;
+      }
+      .ideas li small { display: block; font-weight: 500; color: var(--ink-3); font-size: 13px; margin-top: 1px; }
+
+      /* ---------- Rundown ---------- */
+      .timeline { margin: 6px 0 0; padding: 0; list-style: none; position: relative; }
+      .timeline::before {
+        content: ""; position: absolute; left: 59px; top: 12px; bottom: 12px;
+        width: 2px; background: var(--line);
+      }
+      .timeline li { display: flex; gap: 16px; padding: 10px 0; position: relative; }
+      .timeline .clock {
+        width: 46px; flex: none; text-align: right;
+        font-weight: 800; font-size: 14px; padding-top: 2px; font-variant-numeric: tabular-nums;
+      }
+      .timeline .dot {
+        width: 14px; height: 14px; border-radius: 50%; flex: none; margin-top: 5px;
+        background: var(--surface); border: 3px solid var(--red); z-index: 1;
+      }
+      .timeline .seg h3 { margin: 0; font-size: 16px; font-weight: 800; }
+      .timeline .seg p { margin: 2px 0 0; color: var(--ink-2); font-size: 14px; max-width: 52ch; }
+
+      /* ---------- Donts & notes ---------- */
+      .donts { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+      @media (min-width: 760px) { .donts { grid-template-columns: 1fr 1fr; } }
+      .donts li {
+        display: flex; gap: 12px; align-items: flex-start;
+        background: var(--red-soft); border-radius: 12px; padding: 14px 16px;
+        font-weight: 600; font-size: 15px;
+      }
+      .donts li svg { flex: none; margin-top: 2px; color: var(--red-dark); }
+      .donts li small { display: block; font-weight: 500; color: var(--ink-2); font-size: 13px; margin-top: 2px; }
+      .duo { display: grid; gap: 12px; }
+      @media (min-width: 760px) { .duo { grid-template-columns: 1fr 1fr; } }
+      .duo .panel p { margin: 0 0 10px; color: var(--ink-2); font-size: 15px; }
+      .duo .panel p:last-child { margin-bottom: 0; }
+      .duo .panel p strong { color: var(--ink); }
+
+      footer {
+        margin-top: 44px; padding: 18px;
+        background: var(--surface); border: 1px dashed var(--line); border-radius: 16px;
+        color: var(--ink-2); font-size: 14px;
+      }
+      footer p { margin: 0 0 8px; }
+      footer p:last-child { margin-bottom: 0; }
+      footer strong { color: var(--ink); }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+
+      <!-- HERO -->
+      <header class="hero">
+        <span class="live-badge"><span class="live-dot"></span>LIVE &bull; VIOLENCE DISTRICT</span>
+        <h1>Halo, Dian! Ini dashboard live kamu</h1>
+        <p class="sub">
+          Semua angka, jadwal, dan rencana konten <strong>@misstarik243</strong> ada di satu tempat ini.
+          Akun utamamu <strong>@dian lestari</strong> belum bisa live, jadi semua live jalan di akun ini dulu ya.
+        </p>
+        <div class="hero-meta">
+          <span class="chip">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+            Data per 22 Nov 2026
+          </span>
+          <span class="chip">Bio: &ldquo;Violence District Player&rdquo;</span>
+          <a class="chip" href="https://saweria.co/dnlstari24397" target="_blank" rel="noopener">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21.2l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
+            Saweria: dnlstari24397
+          </a>
+        </div>
+      </header>
+
+      <!-- ANGKA UTAMA -->
+      <section aria-labelledby="h-angka">
+        <div class="sec-head">
+          <h2 id="h-angka">Angka minggu lalu</h2>
+          <span class="when">LIVE 16&ndash;22 Nov 2026</span>
+        </div>
+        <p class="sec-desc">Hasil live kamu selama seminggu kemarin. Seminggu ini kamu live total 5 jam &mdash; dan angka per jamnya yang paling penting buat dikejar.</p>
+
+        <div class="stat-grid">
+          <div class="stat hero-stat">
+            <p class="label">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+              Total tayangan live
+            </p>
+            <div class="num">495</div>
+            <p class="note">Dari semua sesi live minggu ini</p>
+          </div>
+          <div class="stat">
+            <p class="label">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+              Tayangan per jam
+            </p>
+            <div class="num">&plusmn;99</div>
+            <p class="note">495 tayangan &divide; 5 jam live. Target: 200/jam</p>
+          </div>
+          <div class="stat">
+            <p class="label">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21.2l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
+              Suka di live
+            </p>
+            <div class="num">8.683</div>
+            <p class="note">Tap-tap layar dari penonton</p>
+          </div>
+          <div class="stat">
+            <p class="label">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.4c-1.5 0-3-.4-4.2-1.1L3 20l1.2-5.2A8.4 8.4 0 1 1 21 11.5z"/></svg>
+              Komentar
+            </p>
+            <div class="num">235</div>
+            <p class="note">Obrolan penonton selama live</p>
+          </div>
+          <div class="stat">
+            <p class="label">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg>
+              Pengikut baru dari live
+            </p>
+            <div class="num">4</div>
+            <p class="note">Konversi 0,8% dari tayangan &mdash; ini yang mau dinaikkan</p>
+          </div>
+          <div class="stat">
+            <p class="label">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.7 15 8.6l6.5.9-4.7 4.6 1.1 6.5L12 17.5l-5.9 3.1 1.1-6.5L2.5 9.5 9 8.6z"/></svg>
+              Berlian diterima
+            </p>
+            <div class="num">56</div>
+            <p class="note">Dari gift penonton minggu ini</p>
+          </div>
+          <div class="stat">
+            <p class="label">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+              Durasi live
+            </p>
+            <div class="num">5 jam</div>
+            <p class="note">Total selama 16&ndash;22 Nov</p>
+          </div>
+          <div class="stat">
+            <p class="label">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 10.6 6.8-4.2M8.6 13.4l6.8 4.2"/></svg>
+              Kali dibagikan
+            </p>
+            <div class="num">2</div>
+            <p class="note">Live kamu di-share penonton</p>
+          </div>
+        </div>
+
+        <div class="split">
+          <div class="panel">
+            <h3>Profil &amp; postingan</h3>
+            <p class="p-sub">Posisi akun per 22 Nov 2026 dan performa postingan 7 hari terakhir</p>
+            <div class="mini-stats">
+              <div>
+                <div class="m-num">120</div>
+                <div class="m-label">Pengikut <span style="color:var(--green);font-weight:800">+5</span></div>
+              </div>
+              <div>
+                <div class="m-num">201</div>
+                <div class="m-label">Mengikuti</div>
+              </div>
+              <div>
+                <div class="m-num">14</div>
+                <div class="m-label">Total suka profil</div>
+              </div>
+            </div>
+            <div class="mini-stats" style="margin-top:16px;padding-top:14px;border-top:1px solid var(--line)">
+              <div>
+                <div class="m-num">307</div>
+                <div class="m-label">Tayangan postingan</div>
+              </div>
+              <div>
+                <div class="m-num">+103</div>
+                <div class="m-label">Pengikut neto <span style="color:var(--green);font-weight:800">+1.030%</span></div>
+              </div>
+              <div>
+                <div class="m-num">12</div>
+                <div class="m-label">Suka postingan</div>
+              </div>
+            </div>
+            <p style="margin:14px 0 0;font-size:14px;color:var(--ink-2)">Postinganmu lagi naik &mdash; pengikut neto melonjak <strong style="color:var(--ink)">+1.030%</strong> dalam 7 hari. Klip pendek itu mesin pengikutnya, live mesin penonton setianya.</p>
+          </div>
+
+          <div class="panel">
+            <h3>Pemberi gift teratas</h3>
+            <p class="p-sub">Terima kasih buat yang sudah kirim gift minggu ini</p>
+            <div class="gifter">
+              <span class="rank">1</span>
+              <span class="g-name">Amy</span>
+              <span class="g-coins">51 koin<small>gift terbanyak</small></span>
+            </div>
+            <div class="gifter">
+              <span class="rank">2</span>
+              <span class="g-name">LM10</span>
+              <span class="g-coins">1 koin<small>&nbsp;</small></span>
+            </div>
+            <p style="margin:12px 0 0;font-size:14px;color:var(--ink-2)">Total berlian minggu ini: <strong style="color:var(--ink)">56</strong>. Jangan lupa sebut nama dan ucapkan terima kasih setiap ada yang kirim gift &mdash; itu yang bikin mereka balik lagi.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- TARGET -->
+      <section aria-labelledby="h-target">
+        <div class="sec-head">
+          <h2 id="h-target">Progres ke target 4 minggu</h2>
+          <span class="when">22 Nov &ndash; 20 Des 2026</span>
+        </div>
+        <p class="sec-desc">Targetnya pelan tapi pasti. Bar di bawah ini posisi kamu per 22 Nov 2026 &mdash; titik awalnya, jadi memang belum jauh. Yang penting konsisten tiap minggu.</p>
+
+        <div class="targets">
+          <div class="target">
+            <div class="t-top">
+              <h3>Pengikut</h3>
+              <span class="t-nums"><strong>120</strong> dari 300</span>
+            </div>
+            <div class="bar"><span data-w="40"></span></div>
+            <p class="t-note">Sudah 40% jalan. Perlu +180 pengikut lagi dalam 4 minggu &mdash; sekitar 45 per minggu.</p>
+          </div>
+          <div class="target">
+            <div class="t-top">
+              <h3>Tayangan live per jam</h3>
+              <span class="t-nums"><strong>&plusmn;99</strong> dari 200</span>
+            </div>
+            <div class="bar"><span data-w="50"></span></div>
+            <p class="t-note">Sudah separuh jalan. Kuncinya: klip sebelum live + judul pakai hook, biar yang masuk lebih ramai.</p>
+          </div>
+          <div class="target">
+            <div class="t-top">
+              <h3>Pengikut baru per live</h3>
+              <span class="t-nums"><strong>4</strong> dari 10&ndash;15</span>
+            </div>
+            <div class="bar"><span data-w="40"></span></div>
+            <p class="t-note">Targetnya 10&ndash;15 per live. Ajakan follow di awal dan penutup live itu penentunya.</p>
+          </div>
+          <div class="target">
+            <div class="t-top">
+              <h3>Rutinitas mingguan</h3>
+              <span class="t-nums"><strong>4&times;</strong> live / minggu</span>
+            </div>
+            <div class="bar"><span class="cyan" data-w="100"></span></div>
+            <p class="t-note">Jadwalnya sudah tetap (lihat di bawah). Tinggal dijalankan terus, jangan bolong.</p>
+          </div>
+        </div>
+
+        <div class="routine">
+          <div class="r-chip"><strong>Live 4&times; seminggu</strong>1,5&ndash;2 jam per sesi, jam tetap 19.00&ndash;21.00 WIB.</div>
+          <div class="r-chip"><strong>Klip pendek 10&times; seminggu</strong>2 klip per hari, 5 hari seminggu &mdash; ini bahan bakar pengikut baru.</div>
+          <div class="r-chip"><strong>Pembagian tugas</strong>Kamu fokus live saja. Klip pendek diurus &ldquo;pegawai AI&rdquo; dari replay live (sementara dipotong pakai CapCut).</div>
+        </div>
+      </section>
+
+      <!-- JADWAL -->
+      <section aria-labelledby="h-jadwal">
+        <div class="sec-head">
+          <h2 id="h-jadwal">Jadwal live</h2>
+          <span class="when">Jam tetap, tiap minggu</span>
+        </div>
+        <p class="sec-desc">Jam yang sama terus itu penting &mdash; penonton jadi hafal, dan TikTok lebih gampang merekomendasikan live yang rutin.</p>
+
+        <div class="days">
+          <div class="day" data-day="2">
+            <span class="today-badge">HARI INI</span>
+            <p class="d-name">Selasa</p>
+            <p class="d-time">19.00&ndash;21.00 WIB</p>
+            <p class="d-dur">Durasi 1,5&ndash;2 jam</p>
+          </div>
+          <div class="day" data-day="4">
+            <span class="today-badge">HARI INI</span>
+            <p class="d-name">Kamis</p>
+            <p class="d-time">19.00&ndash;21.00 WIB</p>
+            <p class="d-dur">Durasi 1,5&ndash;2 jam</p>
+          </div>
+          <div class="day" data-day="6">
+            <span class="today-badge">HARI INI</span>
+            <p class="d-name">Sabtu</p>
+            <p class="d-time">19.00&ndash;21.00 WIB</p>
+            <p class="d-dur">Durasi 1,5&ndash;2 jam</p>
+          </div>
+          <div class="day" data-day="0">
+            <span class="today-badge">HARI INI</span>
+            <p class="d-name">Minggu</p>
+            <p class="d-time">19.00&ndash;21.00 WIB</p>
+            <p class="d-dur">Durasi 1,5&ndash;2 jam</p>
+          </div>
+        </div>
+        <p id="today-note" style="margin:12px 0 0;font-size:14px;color:var(--ink-2)"></p>
+
+        <ul class="tips">
+          <li><strong>Judul pakai hook</strong>Tulis judul yang bikin penasaran, bukan cuma &ldquo;main VD&rdquo;. Contoh: &ldquo;Ranked pertama kali, bisa survive nggak ya?&rdquo;</li>
+          <li><strong>5 menit pertama itu emas</strong>Sapa penonton yang masuk dengan nama, minta tap-tap layar, dan ajak follow dari awal.</li>
+          <li><strong>Pin komentar jadwal</strong>Pin komentar berisi jadwal live berikutnya, supaya penonton tahu kapan harus balik.</li>
+        </ul>
+      </section>
+
+      <!-- KLIP -->
+      <section aria-labelledby="h-klip">
+        <div class="sec-head">
+          <h2 id="h-klip">Rencana klip pendek</h2>
+          <span class="when">2 klip / hari &bull; 5 hari / minggu</span>
+        </div>
+        <p class="sec-desc">Klip pendek 15&ndash;30 detik, dipotong dari momen terbaik replay live. Satu klip wajib tayang <strong>1&ndash;2 jam sebelum live</strong> &mdash; itu pengantar penonton masuk ke live kamu. Klipnya diurus &ldquo;pegawai AI&rdquo; (sementara pakai CapCut), jadi kamu cukup fokus main dan live.</p>
+
+        <div class="hashtag-row" aria-label="Hashtag wajib">
+          <span class="tag">#ViolenceDistrict</span>
+          <span class="tag">#RobloxIndonesia</span>
+          <span class="tag">#VD</span>
+          <span class="tag">#RobloxHorror</span>
+          <button class="btn" id="copy-tags" type="button">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            <span id="copy-tags-label">Salin hashtag</span>
+          </button>
+        </div>
+
+        <ol class="ideas">
+          <li>Review The Butcher<small>Killer baru &mdash; tunjukkan skill dan cara menghadapinya</small></li>
+          <li>Main Ranked pertama kali<small>Kegugupan pertama itu konten yang jujur dan relatable</small></li>
+          <li>Momen jumpscare<small>Reaksi kaget asli selalu paling banyak ditonton ulang</small></li>
+          <li>3 perk survivor wajib pemula<small>Konten tips &mdash; paling sering disimpan dan dibagikan</small></li>
+          <li>Killer tier list November 2026<small>Format daftar selalu memancing komentar dan debat</small></li>
+          <li>Escape clutch 1 HP<small>Momen nyaris mati lalu lolos = penonton menahan napas</small></li>
+          <li>Kesalahan pemula di VD<small>Edukasi ringan yang bikin pemula merasa terbantu</small></li>
+          <li>Mabar sama penonton<small>Potongan live saat main bareng follower</small></li>
+          <li>Sehari grind Screws dapat berapa?<small>Angka konkret selalu bikin penasaran</small></li>
+          <li>Duet / stitch video VD orang lain<small>Ikut arus konten kreator VD lain, tambah jangkauan</small></li>
+        </ol>
+      </section>
+
+      <!-- RUNDOWN -->
+      <section aria-labelledby="h-rundown">
+        <div class="sec-head">
+          <h2 id="h-rundown">Rundown live 2 jam</h2>
+          <span class="when">Pakai pola ini tiap sesi</span>
+        </div>
+        <p class="sec-desc">Struktur yang sama tiap live bikin penonton tahu ritmenya &mdash; dan bikin kamu nggak kehabisan bahan di tengah jalan.</p>
+
+        <ol class="timeline">
+          <li>
+            <span class="clock">0&ndash;10&prime;</span><span class="dot"></span>
+            <div class="seg">
+              <h3>Pemanasan</h3>
+              <p>Sapa penonton yang masuk dengan nama, minta tap-tap, sampaikan mau main apa malam ini, dan pin komentar jadwal live berikutnya.</p>
+            </div>
+          </li>
+          <li>
+            <span class="clock">10&ndash;90&prime;</span><span class="dot"></span>
+            <div class="seg">
+              <h3>Main utama</h3>
+              <p>Gameplay inti: mabar bareng penonton dan terima request killer / survivor dari komentar. Ini porsi terbesar livenya.</p>
+            </div>
+          </li>
+          <li>
+            <span class="clock">90&ndash;110&prime;</span><span class="dot"></span>
+            <div class="seg">
+              <h3>Segmen challenge</h3>
+              <p>Tantangan khusus biar ada klimaks: misalnya menang tanpa perk, atau lolos dengan HP di bawah 10.</p>
+            </div>
+          </li>
+          <li>
+            <span class="clock">110&ndash;120&prime;</span><span class="dot"></span>
+            <div class="seg">
+              <h3>Penutup</h3>
+              <p>Ingatkan follow dan jam live berikutnya, lalu ucapkan terima kasih satu-satu ke pemberi gift malam itu.</p>
+            </div>
+          </li>
+        </ol>
+      </section>
+
+      <!-- KOLABORASI & MONETISASI -->
+      <section aria-labelledby="h-kolab">
+        <div class="sec-head">
+          <h2 id="h-kolab">Kolaborasi &amp; monetisasi</h2>
+        </div>
+        <div class="duo">
+          <div class="panel">
+            <h3>Kolaborasi</h3>
+            <p><strong>LIVE Match seminggu sekali</strong> dengan streamer Violence District kecil lain &mdash; saling tukar penonton, dua-duanya untung.</p>
+            <p><strong>Ikuti LIVE FEST 2026</strong> &mdash; event resmi TikTok, momen bagus buat akun kecil dapat sorotan ekstra.</p>
+          </div>
+          <div class="panel">
+            <h3>Monetisasi: sabar dulu</h3>
+            <p>Urutannya: <strong>penonton dulu, gift ikut sendiri.</strong> Jangan kebalik &mdash; akun yang penontonnya setia akan menghasilkan dengan sendirinya.</p>
+            <p>Saweria sudah ada di bio (<a href="https://saweria.co/dnlstari24397" target="_blank" rel="noopener">saweria.co/dnlstari24397</a>) &mdash; cukup sebutkan sesekali saja, jangan diulang-ulang.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- JANGAN DILAKUKAN -->
+      <section aria-labelledby="h-jangan">
+        <div class="sec-head">
+          <h2 id="h-jangan">Yang jangan dilakukan</h2>
+        </div>
+        <ul class="donts">
+          <li>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="m6 6 12 12"/></svg>
+            <span>Jangan beli viewers / follower<small>Angka palsu merusak rekomendasi akun dan bisa kena penalti TikTok.</small></span>
+          </li>
+          <li>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="m6 6 12 12"/></svg>
+            <span>Jangan giveaway item VD berbayar<small>Belum waktunya keluar modal &mdash; fokus ke konten dulu.</small></span>
+          </li>
+          <li>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="m6 6 12 12"/></svg>
+            <span>Jangan live di jam acak<small>Di luar jadwal tetap, penonton nggak tahu kamu live dan algoritma kehilangan ritme.</small></span>
+          </li>
+          <li>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="m6 6 12 12"/></svg>
+            <span>Jangan diam lama di live<small>Live yang sepi suara bikin penonton cepat keluar. Ngobrol terus, komentari permainanmu sendiri.</small></span>
+          </li>
+        </ul>
+      </section>
+
+      <footer>
+        <p><strong>Tentang data di halaman ini:</strong> semua angka berasal dari screenshot TikTok Studio akun @misstarik243 per <strong>22 November 2026</strong> (periode live 16&ndash;22 Nov 2026). Angka turunan: tayangan per jam &plusmn;99 (495 &divide; 5 jam) dan konversi live ke pengikut 0,8% (4 dari 495).</p>
+        <p>Halaman ini akan diperbarui kalau ada screenshot TikTok Studio yang baru. Semangat, Dian &mdash; konsisten 4 minggu ke depan, angkanya yang bicara.</p>
+      </footer>
+
+    </div>
+
+    <script>
+      (function () {
+        // Tandai kartu jadwal sesuai hari ini & tampilkan catatan di bawahnya.
+        var dayNames = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+        var liveDays = [0, 2, 4, 6]; // Minggu, Selasa, Kamis, Sabtu
+        var today = new Date().getDay();
+        var cards = document.querySelectorAll(".day[data-day]");
+        for (var i = 0; i < cards.length; i++) {
+          if (parseInt(cards[i].getAttribute("data-day"), 10) === today) {
+            cards[i].classList.add("is-today");
+          }
+        }
+        var note = document.getElementById("today-note");
+        if (note) {
+          if (liveDays.indexOf(today) !== -1) {
+            note.textContent = "Hari ini " + dayNames[today] + " — ada jadwal live jam 19.00–21.00 WIB. Jangan lupa posting 1 klip 1–2 jam sebelumnya ya!";
+            note.style.fontWeight = "700";
+            note.style.color = "var(--red-dark)";
+          } else {
+            // Cari hari live berikutnya
+            var next = null;
+            for (var d = 1; d <= 7; d++) {
+              var cand = (today + d) % 7;
+              if (liveDays.indexOf(cand) !== -1) { next = cand; break; }
+            }
+            note.textContent = "Hari ini " + dayNames[today] + " tidak ada jadwal live. Live berikutnya: " + dayNames[next] + " jam 19.00–21.00 WIB — hari ini cocok buat menyiapkan klip.";
+          }
+        }
+
+        // Animasi progress bar saat halaman dibuka.
+        var bars = document.querySelectorAll(".bar > span[data-w]");
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () {
+            for (var j = 0; j < bars.length; j++) {
+              bars[j].style.width = bars[j].getAttribute("data-w") + "%";
+            }
+          });
+        });
+
+        // Salin hashtag.
+        var btn = document.getElementById("copy-tags");
+        var label = document.getElementById("copy-tags-label");
+        var tagsText = "#ViolenceDistrict #RobloxIndonesia #VD #RobloxHorror";
+        if (btn) {
+          btn.addEventListener("click", function () {
+            function done() {
+              label.textContent = "Hashtag tersalin!";
+              setTimeout(function () { label.textContent = "Salin hashtag"; }, 2200);
+            }
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              navigator.clipboard.writeText(tagsText).then(done, function () { fallback(); });
+            } else { fallback(); }
+            function fallback() {
+              var ta = document.createElement("textarea");
+              ta.value = tagsText;
+              ta.style.position = "fixed"; ta.style.opacity = "0";
+              document.body.appendChild(ta);
+              ta.select();
+              try { document.execCommand("copy"); done(); } catch (e) { label.textContent = tagsText; }
+              document.body.removeChild(ta);
+            }
+          });
+        }
+      })();
+    </script>
+  </body>
+</html>
